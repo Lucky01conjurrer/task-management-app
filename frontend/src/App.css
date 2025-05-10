@@ -223,6 +223,18 @@ body {
   max-height: 100%;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  transition: box-shadow 0.2s ease;
+}
+
+.list:hover {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Drag and drop styles */
+.list.is-dragging {
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  opacity: 0.9;
 }
 
 .list-header {
@@ -339,6 +351,16 @@ body {
   margin-bottom: 0.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.task:hover {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.task.is-dragging {
+  transform: rotate(1deg);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 
 .task-header {

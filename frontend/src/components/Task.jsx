@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Draggable } from 'react-beautiful-dnd';
+import { Draggable } from '@hello-pangea/dnd';
 import { updateTask, deleteTask } from '../services/api';
 
 const Task = ({ task, index, onTasksChange }) => {
@@ -9,13 +9,13 @@ const Task = ({ task, index, onTasksChange }) => {
 
   const handleSaveTask = async () => {
     if (title.trim() === '') return;
-    
+
     try {
       const updatedTask = await updateTask(task._id, {
         title,
         description
       });
-      
+
       onTasksChange(updatedTask);
       setIsEditing(false);
     } catch (error) {

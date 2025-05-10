@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { DragDropContext } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable } from '@hello-pangea/dnd';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import List from '../components/List';
@@ -121,7 +121,7 @@ const Dashboard = () => {
   };
 
   const handleDragEnd = async (result) => {
-    const { destination, source, draggableId } = result;
+    const { destination, source, draggableId, type } = result;
 
     // If dropped outside a droppable area
     if (!destination) return;
@@ -134,6 +134,34 @@ const Dashboard = () => {
       return;
     }
 
+    // Handle list reordering
+    if (type === 'LIST') {
+      const newListOrder = Array.from(lists);
+      const [movedList] = newListOrder.splice(source.index, 1);
+      newListOrder.splice(destination.index, 0, movedList);
+
+      // Update positions based on new order
+      const updatedLists = newListOrder.map((list, index) => ({
+        ...list,
+        position: index
+      }));
+
+      // Update state optimistically
+      setLists(updatedLists);
+
+      // Update in the backend
+      try {
+        await handleUpdateList(movedList._id, { position: destination.index });
+      } catch (error) {
+        console.error('Error moving list:', error);
+        // Revert to previous state on error
+        setLists(lists);
+      }
+
+      return;
+    }
+
+    // Handle task movement
     // Get the task that was moved
     const task = tasks[source.droppableId].find(task => task._id === draggableId);
 
@@ -198,33 +226,43 @@ const Dashboard = () => {
       </header>
 
       <DragDropContext onDragEnd={handleDragEnd}>
-        <div className="board">
-          {lists.map(list => (
-            <List
-              key={list._id}
-              list={list}
-              tasks={tasks[list._id] || []}
-              onAddTask={handleAddTask}
-              onUpdateList={handleUpdateList}
-              onDeleteList={handleDeleteList}
-              onTasksChange={handleTasksChange}
-            />
-          ))}
+        <Droppable droppableId="all-lists" direction="horizontal" type="LIST">
+          {(provided) => (
+            <div
+              className="board"
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {lists.map((list, index) => (
+                <List
+                  key={list._id}
+                  list={list}
+                  index={index}
+                  tasks={tasks[list._id] || []}
+                  onAddTask={handleAddTask}
+                  onUpdateList={handleUpdateList}
+                  onDeleteList={handleDeleteList}
+                  onTasksChange={handleTasksChange}
+                />
+              ))}
+              {provided.placeholder}
 
-          <div className="add-list">
-            <form onSubmit={handleAddList}>
-              <input
-                type="text"
-                placeholder="Add a new list"
-                value={newListTitle}
-                onChange={(e) => setNewListTitle(e.target.value)}
-              />
-              <button type="submit" className="btn btn-primary">
-                Add List
-              </button>
-            </form>
-          </div>
-        </div>
+              <div className="add-list">
+                <form onSubmit={handleAddList}>
+                  <input
+                    type="text"
+                    placeholder="Add a new list"
+                    value={newListTitle}
+                    onChange={(e) => setNewListTitle(e.target.value)}
+                  />
+                  <button type="submit" className="btn btn-primary">
+                    Add List
+                  </button>
+                </form>
+              </div>
+            </div>
+          )}
+        </Droppable>
       </DragDropContext>
     </div>
   );
