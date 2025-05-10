@@ -1,0 +1,37 @@
+# Task Management Application Requirements
+
+## Backend Dependencies
+# See backend/requirements.txt for detailed backend dependencies
+- Node.js v16+
+- Express.js
+- MongoDB
+- Mongoose
+- JWT Authentication
+- bcrypt for password hashing
+
+## Frontend Dependencies
+# See frontend/requirements.txt for detailed frontend dependencies
+- React 19
+- React Router
+- Axios
+- React Beautiful DND (for drag and drop)
+- Vite (build tool)
+
+## Development Tools
+- Git
+- npm or yarn
+- nodemon (for backend development)
+
+## Environment Variables Required
+- PORT: Backend server port (default: 5000)
+- MONGODB_URI: MongoDB connection string
+- JWT_SECRET: Secret key for JWT token generation
+- JWT_EXPIRE: JWT token expiration time (e.g., "30d")
+
+## Installation Instructions
+1. Clone the repository
+2. Install backend dependencies: cd backend && npm install
+3. Install frontend dependencies: cd frontend && npm install
+4. Set up environment variables in backend/.env
+5. Start backend: cd backend && npm run dev
+6. Start frontend: cd frontend && npm run dev
