@@ -10,6 +10,10 @@ const listSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
+  color: {
+    type: String,
+    default: '#f4f5f7'
+  },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

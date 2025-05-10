@@ -8,6 +8,7 @@ dotenv.config();
 
 // Import routes
 const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/users');
 const listRoutes = require('./routes/lists');
 const taskRoutes = require('./routes/tasks');
 
@@ -45,6 +46,7 @@ connectDB();
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 app.use('/api/lists', listRoutes);
 app.use('/api/tasks', taskRoutes);
 

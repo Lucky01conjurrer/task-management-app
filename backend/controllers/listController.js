@@ -19,7 +19,7 @@ const getLists = async (req, res) => {
 // @access  Private
 const createList = async (req, res) => {
   try {
-    const { title, position } = req.body;
+    const { title, position, color } = req.body;
 
     // Find the highest position if not provided
     let listPosition = position;
@@ -31,6 +31,7 @@ const createList = async (req, res) => {
     const list = await List.create({
       title,
       position: listPosition,
+      color,
       user: req.user._id
     });
 
@@ -46,7 +47,7 @@ const createList = async (req, res) => {
 // @access  Private
 const updateList = async (req, res) => {
   try {
-    const { title, position } = req.body;
+    const { title, position, color } = req.body;
     const list = await List.findById(req.params.id);
 
     if (!list) {
@@ -61,6 +62,9 @@ const updateList = async (req, res) => {
     list.title = title || list.title;
     if (position !== undefined) {
       list.position = position;
+    }
+    if (color !== undefined) {
+      list.color = color;
     }
 
     const updatedList = await list.save();
@@ -89,7 +93,7 @@ const deleteList = async (req, res) => {
 
     // Delete all tasks in the list
     await Task.deleteMany({ list: list._id });
-    
+
     // Delete the list
     await list.deleteOne();
 

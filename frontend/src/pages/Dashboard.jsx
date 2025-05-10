@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import List from '../components/List';
 import {
   getLists,
   createList,
+  updateList,
   getTasksByList,
   createTask,
   moveTask
@@ -12,6 +14,7 @@ import {
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [lists, setLists] = useState([]);
   const [tasks, setTasks] = useState({});
   const [newListTitle, setNewListTitle] = useState('');
@@ -46,9 +49,9 @@ const Dashboard = () => {
 
   const handleAddList = async (e) => {
     e.preventDefault();
-    
+
     if (newListTitle.trim() === '') return;
-    
+
     try {
       const newList = await createList({ title: newListTitle });
       setLists([...lists, newList]);
@@ -64,6 +67,22 @@ const Dashboard = () => {
     const newTasks = { ...tasks };
     delete newTasks[listId];
     setTasks(newTasks);
+  };
+
+  const handleUpdateList = async (listId, updatedData) => {
+    try {
+      const updatedList = await updateList(listId, updatedData);
+
+      // Update the lists state with the updated list
+      setLists(lists.map(list =>
+        list._id === listId ? { ...list, ...updatedData } : list
+      ));
+
+      return updatedList;
+    } catch (error) {
+      console.error('Error updating list:', error);
+      throw error;
+    }
   };
 
   const handleAddTask = async (listId, taskData) => {
@@ -120,12 +139,12 @@ const Dashboard = () => {
 
     // Create new tasks state
     const newTasks = { ...tasks };
-    
+
     // Remove task from source list
     newTasks[source.droppableId] = newTasks[source.droppableId].filter(
       task => task._id !== draggableId
     );
-    
+
     // Add task to destination list
     const updatedTask = { ...task, list: destination.droppableId };
     newTasks[destination.droppableId] = [
@@ -133,10 +152,10 @@ const Dashboard = () => {
       updatedTask,
       ...newTasks[destination.droppableId].slice(destination.index)
     ];
-    
+
     // Update state optimistically
     setTasks(newTasks);
-    
+
     // Update in the backend
     try {
       await moveTask(draggableId, {
@@ -164,9 +183,17 @@ const Dashboard = () => {
         <h1>Task Management</h1>
         <div className="user-info">
           <span>Welcome, {user.name}</span>
-          <button onClick={logout} className="logout-btn">
-            Logout
-          </button>
+          <div className="user-actions">
+            <button
+              onClick={() => navigate('/profile')}
+              className="profile-btn"
+            >
+              Profile
+            </button>
+            <button onClick={logout} className="logout-btn">
+              Logout
+            </button>
+          </div>
         </div>
       </header>
 
@@ -178,6 +205,7 @@ const Dashboard = () => {
               list={list}
               tasks={tasks[list._id] || []}
               onAddTask={handleAddTask}
+              onUpdateList={handleUpdateList}
               onDeleteList={handleDeleteList}
               onTasksChange={handleTasksChange}
             />

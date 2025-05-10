@@ -133,6 +133,12 @@ body {
   gap: 1rem;
 }
 
+.user-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.profile-btn,
 .logout-btn {
   background-color: rgba(255, 255, 255, 0.2);
   color: white;
@@ -140,10 +146,65 @@ body {
   padding: 0.5rem 1rem;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 0.9rem;
 }
 
+.profile-btn:hover,
 .logout-btn:hover {
   background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Profile Page Styles */
+.profile-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.profile-header h1 {
+  margin: 0;
+  color: var(--primary-color);
+}
+
+.back-button {
+  background-color: var(--light-gray);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.back-button:hover {
+  background-color: var(--gray);
+}
+
+.profile-form-container {
+  background-color: white;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.success-message {
+  background-color: rgba(97, 189, 79, 0.1);
+  color: var(--success-color);
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.optional {
+  font-size: 0.8rem;
+  color: var(--dark-gray);
+  font-weight: normal;
 }
 
 .board {
@@ -176,6 +237,10 @@ body {
   font-weight: 600;
   margin: 0;
   cursor: pointer;
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .list-title-edit input {
@@ -187,16 +252,78 @@ body {
   font-weight: 600;
 }
 
+.list-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.list-options-btn,
 .delete-list-btn {
   background: none;
   border: none;
   color: var(--dark-gray);
   font-size: 1.25rem;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+}
+
+.list-options-btn:hover,
+.delete-list-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .delete-list-btn:hover {
   color: var(--danger-color);
+}
+
+.list-options {
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  margin: 0 0.5rem 0.5rem;
+  padding: 0.75rem;
+  z-index: 10;
+}
+
+.list-options-header {
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--gray);
+}
+
+.color-picker {
+  margin-top: 0.5rem;
+}
+
+.color-picker-label {
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.color-options {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.color-option {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  border: 1px solid var(--gray);
+  cursor: pointer;
+}
+
+.color-option:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .task-list {

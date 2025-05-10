@@ -38,6 +38,17 @@ export const logout = async () => {
   return response.data;
 };
 
+// User API
+export const getUserProfile = async () => {
+  const response = await api.get('/users/profile');
+  return response.data;
+};
+
+export const updateUserProfile = async (userData) => {
+  const response = await api.put('/users/profile', userData);
+  return response.data;
+};
+
 // Lists API
 export const getLists = async () => {
   const response = await api.get('/lists');

@@ -1,5 +1,9 @@
 import { createContext, useState, useEffect, useContext } from 'react';
-import { login as loginApi, register as registerApi } from '../services/api';
+import {
+  login as loginApi,
+  register as registerApi,
+  updateUserProfile
+} from '../services/api';
 
 const AuthContext = createContext();
 
@@ -24,11 +28,11 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       setError(null);
       const data = await registerApi({ name, email, password });
-      
+
       // Save user data and token
       localStorage.setItem('user', JSON.stringify(data));
       localStorage.setItem('token', data.token);
-      
+
       setUser(data);
       return data;
     } catch (err) {
@@ -44,11 +48,11 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       setError(null);
       const data = await loginApi({ email, password });
-      
+
       // Save user data and token
       localStorage.setItem('user', JSON.stringify(data));
       localStorage.setItem('token', data.token);
-      
+
       setUser(data);
       return data;
     } catch (err) {
@@ -66,6 +70,32 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  const updateProfile = async (userData) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const updatedUser = await updateUserProfile(userData);
+
+      // Update user data in state and localStorage
+      const newUserData = {
+        ...user,
+        name: updatedUser.name || user.name,
+        email: updatedUser.email || user.email
+      };
+
+      localStorage.setItem('user', JSON.stringify(newUserData));
+      setUser(newUserData);
+
+      return updatedUser;
+    } catch (err) {
+      setError(err.response?.data?.message || 'Profile update failed');
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const value = {
     user,
     loading,
@@ -73,6 +103,7 @@ export const AuthProvider = ({ children }) => {
     register,
     login,
     logout,
+    updateProfile,
     isAuthenticated: !!user,
   };
 
