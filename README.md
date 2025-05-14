@@ -26,7 +26,7 @@ A simplified task management application built with the MERN stack (MongoDB, Exp
 - React.js for UI components
 - React Router for navigation
 - Axios for API requests
-- React Beautiful DND for drag-and-drop functionality
+- React hello-pangea/dnd for drag-and-drop functionality
 
 ### Backend
 - Node.js runtime environment
