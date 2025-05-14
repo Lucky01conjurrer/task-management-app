@@ -146,3 +146,10 @@ npm run dev
   updatedAt: Date
 }
 ```
+
+
+
+
+https://github.com/user-attachments/assets/568dc073-a834-40de-8f59-13e81f89cca8
+
+
